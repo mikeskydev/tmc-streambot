@@ -6,6 +6,11 @@ const streamEmitter = new EventEmitter();
 let startup = false;
 twitch.clientID = require('./../tokens')["twitch-client-id"];
 let streams = { };
+let tags = [
+  "7cefbf30-4c3e-4aa7-99cd-70aabb662f27", 
+  "2fd30cb8-f2e5-415d-9d42-1316cfa61367",
+  "0b83a789-5f6a-45f0-b6a3-a56926b6f8b5",
+];//Speedrun, Randomizer, TAS
 function streamLoop () {
   // Uncomment for logging.
   //console.log("Get streams...");
@@ -16,25 +21,29 @@ function streamLoop () {
     "game_id": [
       "5635" //TMC
     ],
-    "community_id": [
-      "5db93886-7d58-4db7-8936-9aef93910dea",
-      "dbf7204e-af0f-4554-9b47-eb44bca6ff27",
-      "6e940c4a-c42f-47d2-af83-0a2c7e47c421"
-    ], //Zelda-speedruns, zelda-speed-runs, speedrunning
+    "first": 99,
     "type": 'live'
   }).then((data) => {
     let res = data.response.data;
     let user_ids = [ ];
     for (let stream of res) {
-      user_ids.push(stream["user_id"]);
-      if (typeof streams[stream["user_id"]] === 'undefined') {
-        streams[stream["user_id"]] = { };
+      if (stream.tag_ids) {
+        var speedrun = tags.find(tag => {
+          if (stream.tag_ids.includes(tag))
+            return true;
+          return false;
+        });
       }
-      streams[stream["user_id"]]["timer"] = 15;
-      streams[stream["user_id"]]["title"] = stream["title"];
-      streams[stream["user_id"]]["viewer_count"] = stream["viewer_count"];
-      streams[stream["user_id"]]["game_id"] = stream["game_id"]
-      
+      if (speedrun) {
+        user_ids.push(stream["user_id"]);
+        if (typeof streams[stream["user_id"]] === 'undefined') {
+          streams[stream["user_id"]] = { };
+        }
+        streams[stream["user_id"]]["timer"] = 15;
+        streams[stream["user_id"]]["title"] = stream["title"];
+        streams[stream["user_id"]]["viewer_count"] = stream["viewer_count"];
+        streams[stream["user_id"]]["game_id"] = stream["game_id"]
+      }      
     }
     if (user_ids.length > 0) {
       return twitch.users.getUsers({
