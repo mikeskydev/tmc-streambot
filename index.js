@@ -1,6 +1,5 @@
 const Discord = require('discord.js');
 const discordClient = new Discord.Client();
-const discordToken = require('./../tokens')["discord-token"];
 const twitch = require('./twitch-helix');
 const config = require('./config');
 class DiscordChannel {
@@ -27,7 +26,7 @@ const notifyDiscordChannel = new DiscordChannel(config['discord-notifications-ch
 
 setTimeout(() => {
   console.log("Logging in to discord...");
-  discordClient.login(discordToken).then(() => {
+  discordClient.login(config["discord-token"]).then(() => {
     console.log("Discord login success");
   }).catch((e) => {
     console.log("Discord login failure");

@@ -4,7 +4,7 @@ const config = require('./config');
 var game;
 const streamEmitter = new EventEmitter();
 let startup = false;
-twitch.clientID = require('./../tokens')["twitch-client-id"];
+twitch.clientID = config["twitch-client-id"];
 let streams = { };
 let tags = [
   "7cefbf30-4c3e-4aa7-99cd-70aabb662f27", 
