@@ -90,7 +90,9 @@ discordClient.on('ready', () => {
   discordClient.user.setPresence({
     "status": 'online',
     "game": {
-      "name": config['bot-currently-playing']
+      "name": config['bot-currently-playing'],
+      "type": "streaming",
+      "url": "https://www.twitch.tv/directory/game/The%20Legend%20of%20Zelda%3A%20The%20Minish%20Cap"
     }
   }).catch(failToSet('presence'));
 });
