@@ -61,4 +61,4 @@ typings/
 .next
 
 # config file as they contain tokens
-config.js
+config.json
